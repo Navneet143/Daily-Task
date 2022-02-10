@@ -57,3 +57,15 @@ Doubt
 
 17. Top Offers 
 //img[contains(@alt,'Top Offers')]//ancestor::a
+
+18. Explore Plus 
+
+//a[contains(text(),"Explore")]
+//a[contains(text(),"Explore") or contains(@href,"/plus")]
+
+19. Arrow to move left 
+(//*[ local-name()="svg"][@height="27"])[1]
+
+20. Arrow to move right 
+(//*[ local-name()="svg"][@height="27"])[2]
+
