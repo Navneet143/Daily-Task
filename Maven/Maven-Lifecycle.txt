@@ -1,0 +1,45 @@
+----------Maven-Lifecyle---------
+
+1. Validate 
+Check all the dependencies have been downloaded and are available in local repository
+
+2. Compile 
+It compile the source code (convert .java file to .class file)
+
+3. Test 
+It run unit test for project 
+
+4. Package 
+It pack the compiled code into shareable format like .jar or .war
+
+5. Integeration Test 
+It run integeration test for the project 
+
+6. Verify 
+It check whether project is valid and meet the quality standards 
+
+7. Install
+It install packaged code into local maven repository 
+
+8. Deploy 
+It Copes the finl package code to remote repository to share with other developers
+
+---------------Maven Commands------------------- 
+
+mvn clean 
+Remove all the files that are previous build 
+
+mvn compile 
+COmplie the source code of the project 
+
+mvn test-compile
+Complie the test source code of the project
+
+mvn package 
+Create jar/war file to make it shareable 
+
+mvn install 
+Deploy the packed jar/war file to the local repository 
+
+mvn deploy 
+Copies the final packed file to the local repository for futher sharing.

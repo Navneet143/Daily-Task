@@ -1,8 +1,5 @@
 package LoginTest;
 
-
-
-
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -11,57 +8,76 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Youtube {
 	WebDriver driver;
+
 	public int changeTime(String time) {
-		String[] str2 =time.split(":");
-		int val1 = Integer.parseInt(str2[1]);
-		int val0 = Integer.parseInt(str2[0]);
-		return val0*60 + val1;
+		int val1=0, val0=0; 
+		try{String[] str2 = time.split(":");
+		val1 = Integer.parseInt(str2[1]);
+		val0 = Integer.parseInt(str2[0]);
+		}catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
+		return val0 * 60 + val1;
 	}
-	@Rule public TestName testname = new TestName();
+
+	@Rule
+	public TestName testname = new TestName();
+
 	@Before
 	public void RunBrowser() {
 		System.setProperty("webdriver.chrome.driver", "E:\\Software\\Selenium\\chromedriver.exe");
 		this.driver = new ChromeDriver();
 	}
+
 	@After
 	public void AttheEnd() {
-		System.out.println(testname.getMethodName() +" Test has Ended");
-	}
-	@Test
-	public void YouTube1() {
-		String url="https://www.youtube.com";
-		driver.get(url);
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-		String searchValue="Excuses by AP Dhillon";
-		WebElement srch = driver.findElement(By.xpath("//input[contains(@id,\"search\")]"));
-		srch.sendKeys(searchValue);
-		//srch.sendKeys(Keys.ENTER);
-		srch.submit();
-		//WebElement btn = driver.findElement(By.xpath("//button[@id=\"search-icon-legacy\"]"));
-		//btn.click();
-		driver.findElement(By.xpath("//yt-formatted-string[contains(@aria-label,\"by Intense\")]/../.")).click();
-		driver.findElement(By.xpath("//button[contains(@class,\"ad-skip\")]")).click();
-		WebElement finalTime = driver.findElement(By.xpath("//*[@id=\"movie_player\"]/div[29]/div[2]/div[1]/div[1]/span[2]/span[3]"));
-		int ftime=changeTime(finalTime.getText());
-		System.out.println(ftime);
-		int ctime=0;
-		while(ctime!=ftime) {
-			WebElement curTime=driver.findElement(By.xpath("//span[@class=\"ytp-time-current\"]"));
-			String currentTime=curTime.getText();
-			ctime=changeTime(currentTime);
-			System.out.println(ctime);
-			System.out.println(ftime);
-			if(ctime%5==0)
-			System.out.println("Current Time:"+ctime+"\n"+"Final Time: "+ftime);
-			
-		}
-		System.out.println("Out of the loop"+ ctime+" "+ ftime);
+		System.out.println(testname.getMethodName() + " Test has Ended");
+		driver.close();
 	}
 
+	@Test
+	public void YouTube1() {
+		String url = "https://www.youtube.com";
+		driver.get(url);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		String searchValue = "Excuses by AP Dhillon";
+		WebElement srch = driver.findElement(By.xpath("//input[contains(@id,\"search\")]"));
+		srch.sendKeys(searchValue);
+		srch.submit();
+		driver.findElement(By.xpath("//yt-formatted-string[contains(@aria-label,\"by Intense\")]/../.")).click();
+		try {
+			driver.findElement(By.xpath("//button[contains(@class,\"ad-skip\")]")).click();
+		} catch (NoSuchElementException e) {
+			e.printStackTrace();
+		}
+		String finalTime = driver.findElement(By.xpath("//span[@class=\"ytp-time-duration\"]")).getText();
+		int ftime = changeTime(finalTime);
+		int ctime = 00;
+		WebElement music_player = driver.findElement(By.xpath("//div[@id=\"movie_player\"]"));
+		while (ctime != ftime && ftime - ctime >= 5) {
+			try {
+				Thread.sleep(4830);// 4850 for click
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			music_player.click();
+			WebElement curTime = driver.findElement(By.xpath("//span[@class=\"ytp-time-current\"]"));
+			String currentTime = "00:00";
+			currentTime = curTime.getText();
+			ctime = changeTime(currentTime);
+			if (ctime % 5 == 0) {
+				System.out.println(currentTime + "/" + finalTime);
+			}
+			music_player.click();
+		}
+		System.out.println("...........................Video is over....................");
+	}
 }

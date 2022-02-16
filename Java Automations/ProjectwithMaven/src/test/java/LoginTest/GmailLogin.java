@@ -13,6 +13,8 @@ import org.junit.rules.TestName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class GmailLogin {
 	WebDriver driver;
@@ -20,7 +22,11 @@ public class GmailLogin {
 	@Before
 	public void RunBrowser() {
 		System.setProperty("webdriver.chrome.driver", "E:\\Software\\Selenium\\chromedriver.exe");
-		this.driver = new ChromeDriver();
+		ChromeOptions o= new ChromeOptions();
+	      o.addArguments("--incognito");
+	      DesiredCapabilities c = DesiredCapabilities.chrome();
+	      c.setCapability(ChromeOptions.CAPABILITY, o);
+		this.driver = new ChromeDriver(o);
 	}
 	@After
 	public void AttheEnd() {
